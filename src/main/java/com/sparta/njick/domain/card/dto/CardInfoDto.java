@@ -1,7 +1,6 @@
 package com.sparta.njick.domain.card.dto;
 
 import com.sparta.njick.domain.card.infrastructure.entity.CardEntity;
-import com.sparta.njick.domain.card.model.CardColor;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +12,7 @@ public class CardInfoDto {
     private Long id;
     private String title;
     private String description;
-    private CardColor cardColor;
+    private String cardColor;
     private LocalDateTime deadline;
     private Long boardId;
     private Long taskStateId;

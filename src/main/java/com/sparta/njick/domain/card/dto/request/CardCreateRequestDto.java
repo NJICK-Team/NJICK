@@ -1,6 +1,5 @@
 package com.sparta.njick.domain.card.dto.request;
 
-import com.sparta.njick.domain.card.model.CardColor;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +18,7 @@ public class CardCreateRequestDto {
     @Length(max = 255)
     private String description;
     @NotBlank
-    private CardColor cardColor;
+    private String cardColor;
     private LocalDateTime deadline;
     private Long taskStateId;
     private List<Long> assignedUserIds;

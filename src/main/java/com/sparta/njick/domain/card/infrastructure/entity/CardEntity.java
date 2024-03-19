@@ -1,7 +1,6 @@
 package com.sparta.njick.domain.card.infrastructure.entity;
 
 import com.sparta.njick.domain.card.model.Card;
-import com.sparta.njick.domain.card.model.CardColor;
 import com.sparta.njick.global.jpa.BaseAuditing;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +33,7 @@ public class CardEntity extends BaseAuditing {
     private String description;
 
     @Column(nullable = false)
-    private CardColor cardColor;
+    private String cardColor;
 
     @Column(nullable = false)
     private LocalDateTime deadline;

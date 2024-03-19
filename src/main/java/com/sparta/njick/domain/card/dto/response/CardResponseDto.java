@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.sparta.njick.domain.assign.model.Assign;
 import com.sparta.njick.domain.card.model.Card;
-import com.sparta.njick.domain.card.model.CardColor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public class CardResponseDto {
 
     private String title;
     private String description;
-    private CardColor cardColor;
+    private String cardColor;
     private LocalDateTime deadline;
     private Long boardId;
     private Long taskStateId;

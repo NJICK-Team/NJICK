@@ -22,7 +22,6 @@ public class GlobalCustomExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
         MethodArgumentNotValidException e) {
-        log.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(new ErrorResponse(
                 Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage()));

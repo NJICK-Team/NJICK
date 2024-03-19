@@ -32,8 +32,6 @@ public class UserService {
             .build());
     }
 
-    // ------------------------------검증 메서드 ------------------------------
-
     private void validateEmailDuplicate(String request) {
         if (userRepository.existsByEmail(request)) {
             throw new EntityExistsException("중복된 사용자가 존재합니다.");

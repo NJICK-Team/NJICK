@@ -16,12 +16,13 @@ public class TaskStateServiceImpl implements TaskStateService {
 
     private final TaskStateRepository taskStateRepository;
     private final BoardRepository boardRepository;
+    pirvate final CardRepository cardRepository;
 
     @Override
     public void createTaskState(TaskStateRequestDto requestDto, Long userId) {
         boardRepository.isParticipated(requestDto.getBoardId(), userId);
 
-        taskStateRepository.save(new TaskState(requestDto)).toModel();
+        taskStateRepository.save(new TaskState(requestDto));
     }
 
     @Override
@@ -33,6 +34,18 @@ public class TaskStateServiceImpl implements TaskStateService {
             requestDto.getName(), stateId);
 
         return new TaskStateResponseDto(model);
+    }
+
+    @Override
+    public void deleteTaskState(Long stateId, Long userId) {
+        TaskStateModel model = taskStateRepository.findByIdOrElseThrow(stateId);
+        Long boardId = model.getBoardId();
+        boardRepository.isParticipated(boardId, userId);
+
+        taskStateRepository.delete(stateId);
+
+        //TODO 해당 stateId를 가진 카드를 다 가져옴 => delete
+        cardRepository.deleteByTaskStateId(stateId);
     }
 
 }

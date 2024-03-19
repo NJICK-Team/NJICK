@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,7 +35,7 @@ public class TaskStateController {
     }
 
     @PutMapping("/{stateId}")
-    public ResponseEntity<CommonResponseDto<TaskStateResponseDto>> updateTaskStates(
+    public ResponseEntity<CommonResponseDto<TaskStateResponseDto>> updateTaskState(
         @Valid @RequestBody TaskStateRequestDto requestDto,
         @PathVariable Long stateId,
         @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -44,4 +45,12 @@ public class TaskStateController {
         return CommonResponseDto.of(HttpStatus.OK, "작업상태 수정 성공", responseDto);
     }
 
+    @DeleteMapping("/{stateId}")
+    public ResponseEntity<CommonResponseDto<Void>> deleteTaskState(
+        @PathVariable Long stateId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        taskStatesService.deleteTaskState(stateId, userDetails.getUser().getUserId());
+        return CommonResponseDto.of(HttpStatus.OK, "작업상태 삭제 성공", null);
+    }
 }

@@ -9,4 +9,6 @@ public interface CommentRepository {
     void save(Comment comment);
 
     List<CommentModel> findAllByCardId(Long cardId);
+
+    CommentModel update(Long commentId, String content);
 }

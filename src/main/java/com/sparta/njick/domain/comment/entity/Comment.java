@@ -53,4 +53,8 @@ public class Comment extends BaseAuditing {
             .cardId(cardId)
             .build();
     }
+
+    public void update(String content) {
+        this.content = content;
+    }
 }

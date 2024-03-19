@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentResponseDto> getComments(Long boardId, Long cardId, Long userId) {
-        boardRepository.isParticipated(requestDto.getBoardId(), userId);
+        boardRepository.isParticipated(boardId, userId);
         //TODO 카드 참여자?
 
         List<CommentResponseDto> response = new ArrayList<>();
@@ -42,5 +42,16 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return response;
+    }
+
+    @Override
+    public CommentResponseDto updateComment(CommentRequestDto requestDto, Long boardId, Long cardId,
+        Long commentId, Long userId) {
+        boardRepository.isParticipated(boardId, userId);
+        //TODO 카드 참여자?
+
+        CommentModel model = commentRepository.update(commentId, requestDto.getContent());
+
+        return new CommentResponseDto(model);
     }
 }

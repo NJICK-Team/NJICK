@@ -4,6 +4,7 @@ import com.sparta.njick.domain.taskState.entity.TaskState;
 import com.sparta.njick.domain.taskState.exception.CustomTaskStateException;
 import com.sparta.njick.domain.taskState.exception.TaskStateErrorCode;
 import com.sparta.njick.domain.taskState.model.TaskStateModel;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -43,6 +44,12 @@ public class TaskStateRepositoryImpl implements TaskStateRepository {
         );
 
         return taskState.toModel();
+    }
+
+    @Override
+    public List<TaskStateModel> findAllByBoardId(Long boardId) {
+        return taskStateJpaRepository.findAllByBoardId(boardId).stream().map(TaskState::toModel)
+            .toList();
     }
 
 

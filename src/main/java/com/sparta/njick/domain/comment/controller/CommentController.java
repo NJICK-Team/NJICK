@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,7 @@ public class CommentController {
         @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         commentService.createComment(requestDto, boardId, cardId,
-            userDetails.getUser().getUserId());
+            userDetails.getUser().getId());
         return CommonResponseDto.of(HttpStatus.OK, "카드댓글 생성 성공", null);
     }
 
@@ -44,7 +45,20 @@ public class CommentController {
         @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         List<CommentResponseDto> responseDto = commentService.getComments(boardId, cardId,
-            userDetails.getUser().getUserId());
+            userDetails.getUser().getId());
         return CommonResponseDto.of(HttpStatus.OK, "카드댓글 조회 성공", responseDto);
+    }
+
+    @PutMapping("/{commentId}")
+    public ResponseEntity<CommonResponseDto<CommentResponseDto>> updateComment(
+        @Valid @RequestBody CommentRequestDto requestDto,
+        @PathVariable Long boardId,
+        @PathVariable Long cardId,
+        @PathVariable Long commentId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        CommentResponseDto responseDto = commentService.updateComment(requestDto, boardId, cardId,
+            commentId, userDetails.getUser().getId());
+        return CommonResponseDto.of(HttpStatus.OK, "카드댓글 수정 성공", responseDto);
     }
 }

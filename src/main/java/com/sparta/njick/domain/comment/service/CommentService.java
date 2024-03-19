@@ -9,4 +9,7 @@ public interface CommentService {
     void createComment(CommentRequestDto requestDto, Long boardId, Long cardId, Long userId);
 
     List<CommentResponseDto> getComments(Long boardId, Long cardId, Long userId);
+
+    CommentResponseDto updateComment(CommentRequestDto requestDto, Long boardId, Long cardId,
+        Long commentId, Long id);
 }

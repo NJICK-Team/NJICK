@@ -11,6 +11,7 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtility jwtUtility;
     private final UserDetailsServiceImpl userDetailsService;
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     public JwtAuthorizationFilter(JwtUtility jwtUtility,
         UserDetailsServiceImpl userDetailsService) {
@@ -39,8 +39,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(tokenValue)) {
 
             if (!jwtUtility.isValidateToken(tokenValue)) {
-                log.error("토큰 에러");
-                return;
+                throw new AuthenticationException("토큰 유효성 에러") {
+                };
             }
             Claims info = jwtUtility.getUserInfoFromToken(tokenValue);
             try {

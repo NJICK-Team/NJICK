@@ -62,14 +62,13 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
             authorizeHttpRequests
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/api/v1/users/signup", "/api/v1/users/singin").permitAll()
                 .anyRequest().authenticated()
         );
 
         http.logout(logout -> logout
-            .logoutUrl("/users/logout")
+            .logoutUrl("/api/v1/users/logout")
             .addLogoutHandler((request, response, authentication) -> {
                 String token = jwtUtility.getTokenFromHeader(request);
                 jwtUtility.invalidateToken(token);

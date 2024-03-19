@@ -16,4 +16,6 @@ public class Card {
     private final LocalDateTime deadline;
     private final Long boardId;
     private final Long taskStateId;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 }

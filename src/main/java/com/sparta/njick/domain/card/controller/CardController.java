@@ -3,10 +3,7 @@ package com.sparta.njick.domain.card.controller;
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import com.sparta.njick.domain.card.service.CardService;
-import com.sparta.njick.domain.user.entity.User;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +24,14 @@ public class CardController {
         @PathVariable Long boardId,
         @RequestBody CardCreateRequestDto requestDto) {
         CardResponseDto responseDto = cardService.createCard(requestDto, boardId, 1L);
+        return ResponseEntity.ok().body(responseDto);
+    }
+
+    @GetMapping("{cardId}")
+    public ResponseEntity<CardResponseDto> getCard(
+        @PathVariable Long boardId,
+        @PathVariable Long cardId) {
+        CardResponseDto responseDto = cardService.getCard(1L, boardId, cardId);
         return ResponseEntity.ok().body(responseDto);
     }
 }

@@ -10,7 +10,6 @@ import com.sparta.njick.domain.card.infrastructure.entity.CardJpaRepository;
 import com.sparta.njick.domain.card.model.Card;
 import com.sparta.njick.global.exception.CustomRuntimeException;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -49,10 +48,16 @@ public class CardRepositoryImpl implements CardRepository {
     }
 
     @Override
-    public Card get(Long boardId, Long cardId) {
-        CardEntity found = findById(cardId);
-        validateBoardId(found.getBoardId(), boardId);
+    public List<Assign> findAssignsByCardId(Long cardId) {
+        List<AssignEntity> entities = assignJpaRepository.findAllByCardId(cardId);
+        return entities.stream()
+            .map(AssignEntity::toModel)
+            .toList();
+    }
 
+    @Override
+    public Card get(Long cardId) {
+        CardEntity found = findById(cardId);
         return found.toModel();
     }
 
@@ -62,9 +67,4 @@ public class CardRepositoryImpl implements CardRepository {
         );
     }
 
-    private void validateBoardId(Long origin, Long input) {
-        if (!Objects.equals(origin, input)) {
-            throw new CustomRuntimeException("해당 보드에 맞는 카드가 아닙니다.");
-        }
-    }
 }

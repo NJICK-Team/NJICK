@@ -9,6 +9,7 @@ import com.sparta.njick.domain.card.repository.CardRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +18,7 @@ public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
 
     @Override
+    @Transactional
     public CardResponseDto createCard(CardCreateRequestDto requestDto, Long boardId, Long userId) {
         //보드에 초대된 사용자인지 검증
 
@@ -45,10 +47,15 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    @Transactional
     public CardResponseDto getCard(Long userId, Long boardId, Long cardId) {
         //보드에 초대된 사용자인지 검증
 
-        Card found = cardRepository.get(boardId, cardId);
-        return null;
+        Card found = cardRepository.get(cardId);
+        found.validateBoardId(boardId);
+
+        List<Assign> assigns = cardRepository.findAssignsByCardId(cardId);
+
+        return new CardResponseDto(found, assigns);
     }
 }

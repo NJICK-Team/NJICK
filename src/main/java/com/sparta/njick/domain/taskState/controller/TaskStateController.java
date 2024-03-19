@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/v1/taskstates")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/taskstates")
+@RestController
 public class TaskStateController {
 
     private final TaskStateService taskStatesService;
@@ -32,7 +32,7 @@ public class TaskStateController {
         @Valid @RequestBody TaskStateRequestDto requestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        taskStatesService.createTaskState(requestDto, userDetails.getUser().getUserId());
+        taskStatesService.createTaskState(requestDto, userDetails.getUser().getId());
         return CommonResponseDto.of(HttpStatus.OK, "작업상태 작성 성공", null);
     }
 
@@ -43,7 +43,7 @@ public class TaskStateController {
         @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         TaskStateResponseDto responseDto = taskStatesService.updateTaskState(requestDto, stateId,
-            userDetails.getUser().getUserId());
+            userDetails.getUser().getId());
         return CommonResponseDto.of(HttpStatus.OK, "작업상태 수정 성공", responseDto);
     }
 
@@ -52,7 +52,7 @@ public class TaskStateController {
         @PathVariable Long stateId,
         @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        taskStatesService.deleteTaskState(stateId, userDetails.getUser().getUserId());
+        taskStatesService.deleteTaskState(stateId, userDetails.getUser().getId());
         return CommonResponseDto.of(HttpStatus.OK, "작업상태 삭제 성공", null);
     }
 
@@ -62,7 +62,7 @@ public class TaskStateController {
         @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         List<TaskStateResponseDto> responseDto = taskStatesService.getTaskStates(boardId,
-            userDetails.getUser().getUserId());
+            userDetails.getUser().getId());
         return CommonResponseDto.of(HttpStatus.OK, "보드의 작업상태 조회 성공", responseDto);
     }
 }

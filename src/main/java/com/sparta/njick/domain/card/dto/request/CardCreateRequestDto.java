@@ -3,11 +3,15 @@ package com.sparta.njick.domain.card.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class CardCreateRequestDto {
 

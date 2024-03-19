@@ -3,9 +3,11 @@ package com.sparta.njick.domain.card.dto;
 import com.sparta.njick.domain.card.infrastructure.entity.CardEntity;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @AllArgsConstructor
+@Builder
 @Getter
 public class CardInfoDto {
 

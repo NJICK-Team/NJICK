@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @PropertySource(value = {"classpath:db.properties", "classpath:jwt.properties"})
 public class NjickApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(NjickApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(NjickApplication.class, args);
+    }
 
 }

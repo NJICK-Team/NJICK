@@ -4,8 +4,10 @@ import com.sparta.njick.domain.assign.model.Assign;
 import com.sparta.njick.domain.assign.repository.AssignRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
+@Service
 public class AssignServiceImpl implements AssignService {
 
     private final AssignRepository assignRepository;

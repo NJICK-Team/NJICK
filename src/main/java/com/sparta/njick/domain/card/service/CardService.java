@@ -4,7 +4,6 @@ import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import org.springframework.stereotype.Service;
 
-@Service
 public interface CardService {
 
     CardResponseDto createCard(CardCreateRequestDto requestDto, Long boardId, Long userId);

@@ -1,13 +1,18 @@
 package com.sparta.njick.domain.user.controller;
 
+import com.sparta.njick.domain.user.dto.request.NicknameUpdateRequest;
+import com.sparta.njick.domain.user.dto.request.PasswordUpdateRequest;
 import com.sparta.njick.domain.user.dto.request.SignUpRequest;
 import com.sparta.njick.domain.user.service.UserService;
+import com.sparta.njick.domain.user.userDetails.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +34,17 @@ public class UserController {
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response,
             SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    @PatchMapping("/updates/password")
+    public void updatePassword(@Valid @RequestBody PasswordUpdateRequest request,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.updatePassword(request, userDetails.getUser());
+    }
+
+    @PatchMapping("/updates/nickname")
+    public void updateNickname(@Valid @RequestBody NicknameUpdateRequest request,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.updateNickname(request, userDetails.getUser());
     }
 }

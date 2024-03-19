@@ -18,7 +18,7 @@ public class TaskStateServiceImpl implements TaskStateService {
 
     private final TaskStateRepository taskStateRepository;
     private final BoardRepository boardRepository;
-    pirvate final CardRepository cardRepository;
+    private final CardRepository cardRepository;
 
     @Override
     public void createTaskState(TaskStateRequestDto requestDto, Long userId) {
@@ -57,7 +57,7 @@ public class TaskStateServiceImpl implements TaskStateService {
         List<TaskStateResponseDto> response = new ArrayList<>();
         List<TaskStateModel> models = taskStateRepository.findAllByBoardId(boardId);
 
-        for(TaskStateModel model : models){
+        for (TaskStateModel model : models) {
             response.add(new TaskStateResponseDto(model));
         }
 

@@ -1,23 +1,16 @@
 package com.sparta.njick.domain.card.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.times;
-import static org.mockito.BDDMockito.verify;
 
 import com.sparta.njick.domain.assign.model.Assign;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import com.sparta.njick.domain.card.fixture.CardFixture;
-import com.sparta.njick.domain.card.infrastructure.entity.CardEntity;
 import com.sparta.njick.domain.card.model.Card;
-import com.sparta.njick.domain.card.repository.CardRepository;
 import com.sparta.njick.domain.card.repository.CardRepositoryImpl;
 import java.util.List;
-import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

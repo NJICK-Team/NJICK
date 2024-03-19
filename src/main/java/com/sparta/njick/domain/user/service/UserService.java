@@ -6,6 +6,7 @@ import com.sparta.njick.domain.user.dto.request.SignUpRequest;
 import com.sparta.njick.domain.user.entity.User;
 import com.sparta.njick.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,6 +56,14 @@ public class UserService {
         target.setNickname(newNickname);
     }
 
+    public void delete(User user) {
+        User target = validateUser(user);
+
+        validateDeleted(target);
+
+        userRepository.deleteById(target.getId());
+    }
+
     private void validateEmailDuplicate(String request) {
         if (userRepository.existsByEmail(request)) {
             throw new EntityExistsException("중복된 사용자가 존재합니다.");
@@ -78,5 +87,9 @@ public class UserService {
         }
     }
 
-
+    private static void validateDeleted(User target) {
+        if (target.getDeletedAt() != null) {
+            throw new EntityNotFoundException("이미 삭제된 사용자입니다.");
+        }
+    }
 }

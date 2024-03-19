@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,5 +47,10 @@ public class UserController {
     public void updateNickname(@Valid @RequestBody NicknameUpdateRequest request,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.updateNickname(request, userDetails.getUser());
+    }
+
+    @DeleteMapping("/delete")
+    public void delete(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.delete(userDetails.getUser());
     }
 }

@@ -13,15 +13,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Setter
-@SQLRestriction(value = "deleted_date is NULL")
+@SQLDelete(sql = "update taskStates set deleted_at = NOW() where taskState_id = ?")
+@SQLRestriction(value = "deleted_at is NULL")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TaskStates")
+@Table(name = "taskStates")
 public class TaskState extends BaseAuditing {
 
     @Id

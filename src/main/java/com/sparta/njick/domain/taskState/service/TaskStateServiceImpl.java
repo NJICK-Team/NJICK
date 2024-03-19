@@ -5,6 +5,8 @@ import com.sparta.njick.domain.taskState.dto.responseDto.TaskStateResponseDto;
 import com.sparta.njick.domain.taskState.entity.TaskState;
 import com.sparta.njick.domain.taskState.model.TaskStateModel;
 import com.sparta.njick.domain.taskState.repository.TaskStateRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +48,20 @@ public class TaskStateServiceImpl implements TaskStateService {
 
         //TODO 해당 stateId를 가진 카드를 다 가져옴 => delete
         cardRepository.deleteByTaskStateId(stateId);
+    }
+
+    @Override
+    public List<TaskStateResponseDto> getTaskStates(Long boardId, Long userId) {
+        boardRepository.isParticipated(boardId, userId);
+
+        List<TaskStateResponseDto> response = new ArrayList<>();
+        List<TaskStateModel> models = taskStateRepository.findAllByBoardId(boardId);
+
+        for(TaskStateModel model : models){
+            response.add(new TaskStateResponseDto(model));
+        }
+
+        return response;
     }
 
 }

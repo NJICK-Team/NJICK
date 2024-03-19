@@ -45,6 +45,9 @@ public class CardEntity extends BaseAuditing {
     @Column(nullable = false)
     private Long taskStateId;
 
+    @Column(nullable = false)
+    private Long creatorId;
+
     public Card toModel() {
         return Card.builder()
             .title(title)
@@ -53,6 +56,7 @@ public class CardEntity extends BaseAuditing {
             .deadline(deadline)
             .boardId(boardId)
             .taskStateId(taskStateId)
+            .creatorId(creatorId)
             .build();
     }
 }

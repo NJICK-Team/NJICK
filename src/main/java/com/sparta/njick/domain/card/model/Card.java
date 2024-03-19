@@ -18,4 +18,5 @@ public class Card {
     private final Long taskStateId;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+    private final Long creatorId;
 }

@@ -23,6 +23,7 @@ public class CardRepositoryImpl implements CardRepository {
             .deadline(model.getDeadline())
             .boardId(model.getBoardId())
             .taskStateId(model.getTaskStateId())
+            .creatorId(model.getCreatorId())
             .build();
         return cardJpaRepository.save(entity).toModel();
     }

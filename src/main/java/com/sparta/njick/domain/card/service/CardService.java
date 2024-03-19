@@ -13,7 +13,9 @@ public class CardService {
 
     private final CardRepository cardRepository;
 
-    public CardResponseDto createCard(CardCreateRequestDto requestDto, Long boardId) {
+    public CardResponseDto createCard(CardCreateRequestDto requestDto, Long boardId, Long userId) {
+        //보드에 초대된 사용자인지 검증
+
         Card card = Card.builder()
             .title(requestDto.getTitle())
             .description(requestDto.getDescription())
@@ -21,6 +23,7 @@ public class CardService {
             .deadline(requestDto.getDeadline())
             .taskStateId(requestDto.getTaskStateId())
             .boardId(boardId)
+            .creatorId(userId)
             .build();
         card = cardRepository.save(card);
         return new CardResponseDto(card);

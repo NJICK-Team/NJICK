@@ -1,5 +1,7 @@
 package com.sparta.njick.domain.card.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.sparta.njick.domain.card.model.Card;
 import com.sparta.njick.domain.card.model.CardColor;
 import java.time.LocalDateTime;
@@ -8,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@JsonInclude(Include.NON_NULL)
 public class CardResponseDto {
 
     private String title;
@@ -16,6 +19,7 @@ public class CardResponseDto {
     private LocalDateTime deadline;
     private Long boardId;
     private Long taskStateId;
+    private Long creatorId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -26,6 +30,7 @@ public class CardResponseDto {
         this.deadline = model.getDeadline();
         this.boardId = model.getBoardId();
         this.taskStateId = model.getTaskStateId();
+        this.creatorId = model.getCreatorId();
         this.createdAt = model.getCreatedAt();
         this.updatedAt = model.getUpdatedAt();
     }

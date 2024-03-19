@@ -8,4 +8,6 @@ public interface TaskStateService {
     void createTaskState(TaskStateRequestDto requestDto, Long userId);
 
     TaskStateResponseDto updateTaskState(TaskStateRequestDto requestDto, Long stateId, Long userId);
+
+    void deleteTaskState(Long stateId, Long userId);
 }

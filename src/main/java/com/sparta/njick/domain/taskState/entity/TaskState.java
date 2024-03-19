@@ -46,4 +46,8 @@ public class TaskState extends BaseAuditing {
             .boardId(boardId)
             .build();
     }
+
+    public void update(String name) {
+        this.name = name;
+    }
 }

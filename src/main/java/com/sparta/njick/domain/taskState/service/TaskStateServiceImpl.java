@@ -1,6 +1,7 @@
 package com.sparta.njick.domain.taskState.service;
 
 import com.sparta.njick.domain.taskState.dto.requestDto.TaskStateRequestDto;
+import com.sparta.njick.domain.taskState.dto.responseDto.TaskStateResponseDto;
 import com.sparta.njick.domain.taskState.entity.TaskState;
 import com.sparta.njick.domain.taskState.model.TaskStateModel;
 import com.sparta.njick.domain.taskState.repository.TaskStateRepository;
@@ -14,12 +15,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class TaskStateServiceImpl implements TaskStateService {
 
     private final TaskStateRepository taskStateRepository;
-    // private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
 
     @Override
-    public void createTaskState(TaskStateRequestDto requestDto/*, Long userId*/) {
-        //이건 모든 유저... 보드에 있는 사용자만 이어야 함... userRepository.findByIdOrElseThrow(userId);
+    public void createTaskState(TaskStateRequestDto requestDto, Long userId) {
+        boardRepository.isParticipated(requestDto.getBoardId(), userId);
 
-        TaskStateModel model = taskStateRepository.save(new TaskState(requestDto)).toModel();
+        taskStateRepository.save(new TaskState(requestDto)).toModel();
     }
+
+    @Override
+    public TaskStateResponseDto updateTaskState(TaskStateRequestDto requestDto, Long stateId,
+        Long userId) {
+        boardRepository.isParticipated(requestDto.getBoardId(), userId);
+
+        TaskStateModel model = taskStateRepository.update(requestDto.getBoardId(),
+            requestDto.getName(), stateId);
+
+        return new TaskStateResponseDto(model);
+    }
+
 }

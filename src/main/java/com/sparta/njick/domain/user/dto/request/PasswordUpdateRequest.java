@@ -12,5 +12,5 @@ public class PasswordUpdateRequest {
         regexp = "^(?=.*[a-zA-Z])(?=.*\\W)(?=.*\\d).{8,15}$",
         message = "비밀번호는 최소 8자 이상, 15자 이하로 알파벳과 특수문자, 숫자로 구성되어야 합니다."
     )
-    String newPassword;
+    private String newPassword;
 }

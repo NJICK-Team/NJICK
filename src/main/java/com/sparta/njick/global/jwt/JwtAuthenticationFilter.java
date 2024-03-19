@@ -60,6 +60,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setStatus(401);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("로그인 실패했습니다.");
+        response.getWriter().write("로그인에 실패했습니다.");
     }
 }

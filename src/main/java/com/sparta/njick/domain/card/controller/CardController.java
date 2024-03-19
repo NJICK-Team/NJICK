@@ -22,7 +22,7 @@ public class CardController {
 
     private final CardService cardService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<CardResponseDto> createCard(
         @PathVariable Long boardId,
         @RequestBody CardCreateRequestDto requestDto) {

@@ -1,11 +1,15 @@
 package com.sparta.njick.domain.card.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.njick.domain.assign.infrastructure.AssignEntity;
+import com.sparta.njick.domain.assign.infrastructure.AssignJpaRepository;
+import com.sparta.njick.domain.assign.model.Assign;
 import com.sparta.njick.domain.card.dto.CardInfoDto;
 import com.sparta.njick.domain.card.infrastructure.entity.CardEntity;
 import com.sparta.njick.domain.card.infrastructure.entity.CardJpaRepository;
 import com.sparta.njick.domain.card.model.Card;
 import com.sparta.njick.global.exception.CustomRuntimeException;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Repository;
 public class CardRepositoryImpl implements CardRepository {
 
     private final CardJpaRepository cardJpaRepository;
+    private final AssignJpaRepository assignJpaRepository;
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -30,6 +35,17 @@ public class CardRepositoryImpl implements CardRepository {
             .build();
         CardEntity saved = cardJpaRepository.save(entity);
         return new CardInfoDto(saved);
+    }
+
+    @Override
+    public void assignAll(List<Assign> assigns) {
+        List<AssignEntity> entities = assigns.stream()
+            .map(it -> AssignEntity.builder()
+                .cardId(it.getCardId())
+                .userId(it.getUserId())
+                .build())
+            .toList();
+        assignJpaRepository.saveAll(entities);
     }
 
     @Override

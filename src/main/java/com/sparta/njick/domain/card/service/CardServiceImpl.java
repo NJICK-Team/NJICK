@@ -1,7 +1,6 @@
 package com.sparta.njick.domain.card.service;
 
 import com.sparta.njick.domain.assign.model.Assign;
-import com.sparta.njick.domain.assign.service.AssignService;
 import com.sparta.njick.domain.card.dto.CardInfoDto;
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
@@ -13,10 +12,9 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class CardServiceImpl implements CardService{
+public class CardServiceImpl implements CardService {
 
     private final CardRepository cardRepository;
-    private final AssignService assignService;
 
     @Override
     public CardResponseDto createCard(CardCreateRequestDto requestDto, Long boardId, Long userId) {
@@ -41,7 +39,7 @@ public class CardServiceImpl implements CardService{
                 .cardId(infoDto.getId())
                 .build())
             .toList();
-        assignService.saveAll(assigns);
+        cardRepository.assignAll(assigns);
 
         return new CardResponseDto(card, assigns);
     }

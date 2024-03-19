@@ -1,7 +1,6 @@
 package com.sparta.njick.domain.card.infrastructure.entity;
 
 import com.sparta.njick.domain.card.model.Card;
-import com.sparta.njick.domain.card.model.CardColor;
 import com.sparta.njick.global.jpa.BaseAuditing;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

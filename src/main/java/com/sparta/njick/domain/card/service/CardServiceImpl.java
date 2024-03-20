@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class CardServiceImpl implements CardService {
 
@@ -20,7 +21,6 @@ public class CardServiceImpl implements CardService {
     private final BoardRepository boardRepository;
 
     @Override
-    @Transactional
     public CardResponseDto createCard(CardCreateRequestDto requestDto, Long boardId, Long userId) {
         if (!boardRepository.isParticipated(boardId, userId)) {
             throw new CustomRuntimeException("해당 보드에 참여중인 유저가 아닙니다.");
@@ -33,7 +33,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public CardResponseDto getCard(Long userId, Long boardId, Long cardId) {
         if (!boardRepository.isParticipated(boardId, userId)) {
             throw new CustomRuntimeException("해당 보드에 참여중인 유저가 아닙니다.");
@@ -48,7 +48,6 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    @Transactional
     public CardResponseDto updateCard(CardUpdateRequestDto requestDto, Long boardId, Long cardId,
         Long userId) {
         if (!boardRepository.isParticipated(boardId, userId)) {

@@ -1,17 +1,17 @@
 package com.sparta.njick.domain.card.repository;
 
 import com.sparta.njick.domain.assign.model.Assign;
-import com.sparta.njick.domain.card.dto.CardInfoDto;
+import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.model.Card;
 import java.util.List;
 
 public interface CardRepository {
 
-    CardInfoDto save(Card model);
+    Card save(CardCreateRequestDto requestDto, Long boardId, Long userId);
 
     Card get(Long cardId);
 
-    void assignAll(List<Assign> assigns);
+    List<Assign> assignAll(List<Long> assignedUserIds, Long cardId);
 
     List<Assign> findAssignsByCardId(Long cardId);
 

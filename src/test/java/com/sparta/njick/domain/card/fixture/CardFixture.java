@@ -1,6 +1,5 @@
 package com.sparta.njick.domain.card.fixture;
 
-import com.sparta.njick.domain.card.dto.CardInfoDto;
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.model.Card;
 import java.time.LocalDateTime;
@@ -34,13 +33,5 @@ public interface CardFixture {
         .deadline(TEST_DEAD_LINE)
         .taskStateId(TEST_TASK_STATE_ID)
         .assignedUserIds(List.of(1L, 2L, 3L))
-        .build();
-
-    CardInfoDto TEST_CARD_INFO_DTO = CardInfoDto.builder()
-        .title(TEST_TITLE)
-        .description(TEST_DESCRIPTION)
-        .cardColor(TEST_CARD_COLOR)
-        .deadline(TEST_DEAD_LINE)
-        .taskStateId(TEST_TASK_STATE_ID)
         .build();
 }

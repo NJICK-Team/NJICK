@@ -1,11 +1,13 @@
 package com.sparta.njick.domain.card.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
 
 import com.sparta.njick.domain.assign.model.Assign;
+import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import com.sparta.njick.domain.card.fixture.CardFixture;
 import com.sparta.njick.domain.card.model.Card;
@@ -31,7 +33,10 @@ class CardServiceTest implements CardFixture {
     @Test
     void createCard() {
         //given
-        given(cardRepository.save(any(Card.class))).willReturn(TEST_CARD_INFO_DTO);
+        given(cardRepository.save(any(CardCreateRequestDto.class),
+            eq(TEST_BOARD_ID), eq(TEST_USER_ID))) .willReturn(TEST_CARD);
+        given(cardRepository.assignAll(any(), any()))
+            .willReturn(List.of(new Assign(1L, 1L), new Assign(2L, 1L)));
 
         //when
         CardResponseDto result = cardService.createCard(TEST_CREATE_REQUEST_DTO, TEST_BOARD_ID,
@@ -39,7 +44,7 @@ class CardServiceTest implements CardFixture {
 
         //then
         assertThat(result.getTitle()).isEqualTo(TEST_TITLE);
-        assertThat(result.getAssignedUserIds().size()).isEqualTo(3);
+        assertThat(result.getAssignedUserIds().size()).isEqualTo(2);
     }
 
     @DisplayName("카드 조회 성공")

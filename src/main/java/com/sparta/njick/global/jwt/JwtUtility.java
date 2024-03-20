@@ -55,7 +55,7 @@ public class JwtUtility {
     public String getTokenFromHeader(HttpServletRequest request) {
         String token = request.getHeader(AUTHORIZATION_HEADER);
         if (token != null && token.startsWith(BEARER_PREFIX)) {
-            return token.substring(7);
+            return token.substring(BEARER_PREFIX.length());
         }
         return null;
     }

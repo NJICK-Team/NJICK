@@ -1,6 +1,5 @@
 package com.sparta.njick.global.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.njick.domain.user.userDetails.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -39,7 +38,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(tokenValue)) {
 
             if (!jwtUtility.isValidateToken(tokenValue)) {
-                throw new AuthenticationException("토큰 유효성 에러") {
+                throw new AuthenticationException("토큰 유효성 오류") {
                 };
             }
             Claims info = jwtUtility.getUserInfoFromToken(tokenValue);

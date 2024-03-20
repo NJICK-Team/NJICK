@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Assign {
 
+    private final Long id;
     private final Long userId;
     private final Long cardId;
 }

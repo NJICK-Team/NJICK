@@ -32,6 +32,7 @@ public class AssignEntity {
 
     public Assign toModel() {
         return Assign.builder()
+            .id(id)
             .userId(userId)
             .cardId(cardId)
             .build();

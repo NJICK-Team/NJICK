@@ -19,7 +19,7 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public CardResponseDto createCard(CardCreateRequestDto requestDto, Long boardId, Long userId) {
-        //보드에 초대된 사용자인지 검증
+        //TODO: 보드에 초대된 사용자인지 검증
 
         Card card = cardRepository.save(requestDto, boardId, userId);
         Assigns assigns = cardRepository.assignAll(
@@ -30,7 +30,7 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public CardResponseDto getCard(Long userId, Long boardId, Long cardId) {
-        //보드에 초대된 사용자인지 검증
+        //TODO: 보드에 초대된 사용자인지 검증
 
         Card found = cardRepository.get(cardId);
         found.validateBoardId(boardId);
@@ -44,7 +44,7 @@ public class CardServiceImpl implements CardService {
     @Transactional
     public CardResponseDto updateCard(CardUpdateRequestDto requestDto, Long boardId, Long cardId,
         Long userId) {
-        //보드에 초대된 사용자인지 검증
+        //TODO: 보드에 초대된 사용자인지 검증
         Card found = cardRepository.get(cardId);
         Card updateCard = found.update(requestDto, boardId);
         Card updated = cardRepository.update(updateCard);

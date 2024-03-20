@@ -56,6 +56,11 @@ public class CardRepositoryImpl implements CardRepository {
     }
 
     @Override
+    public void deleteByTaskStateId(Long stateId) {
+
+    }
+
+    @Override
     public Card get(Long cardId) {
         CardEntity found = findById(cardId);
         return found.toModel();

@@ -1,5 +1,7 @@
 package com.sparta.njick.domain.taskState.service;
 
+import com.sparta.njick.domain.board.repository.BoardRepository;
+import com.sparta.njick.domain.card.repository.CardRepository;
 import com.sparta.njick.domain.taskState.dto.requestDto.TaskStateRequestDto;
 import com.sparta.njick.domain.taskState.dto.responseDto.TaskStateResponseDto;
 import com.sparta.njick.domain.taskState.entity.TaskState;

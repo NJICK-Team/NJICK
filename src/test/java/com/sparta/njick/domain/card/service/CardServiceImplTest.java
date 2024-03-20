@@ -109,4 +109,24 @@ public class CardServiceImplTest implements CardFixture {
             TEST_USER_ID))
             .isInstanceOf(CustomRuntimeException.class);
     }
+
+    @DisplayName("[성공] 카드를 조회할 수 있다")
+    @Test
+    void get_card_success() {
+        //given
+        fakeBoardRepository.setIsParticipate(true);
+
+        //when
+        CardResponseDto card = cardService.getCard(TEST_USER_ID, TEST_BOARD_ID, TEST_CARD_ID);
+
+        //then
+        assertThat(card.getTitle()).isEqualTo("title");
+    }
+
+    @DisplayName("[예외] 보드에 참여중이지 않은 유저는 카드를 조회할 수 없다")
+    @Test
+    void get_card_fail() {
+        assertThatThrownBy(() -> cardService.getCard(TEST_USER_ID, TEST_BOARD_ID, TEST_CARD_ID))
+            .isInstanceOf(CustomRuntimeException.class);
+    }
 }

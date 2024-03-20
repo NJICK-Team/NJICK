@@ -32,4 +32,16 @@ public class CommentRepositoryImpl implements CommentRepository {
         comment.update(content);
         return comment.toModel();
     }
+
+    @Override
+    public void deleteById(Long commentId) {
+        commentJpaRepository.deleteById(commentId);
+    }
+
+    @Override
+    public void findByIdOrElseThrow(Long commentId) {
+        commentJpaRepository.findById(commentId).orElseThrow(
+            () -> new CustomCommentException(CommentErrorCode.COMMENT_ERROR_CODE_NOT_FOUND)
+        );
+    }
 }

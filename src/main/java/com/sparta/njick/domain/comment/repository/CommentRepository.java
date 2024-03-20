@@ -11,4 +11,8 @@ public interface CommentRepository {
     List<CommentModel> findAllByCardId(Long cardId);
 
     CommentModel update(Long commentId, String content);
+
+    void deleteById(Long commentId);
+
+    void findByIdOrElseThrow(Long commentId);
 }

@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.sparta.njick.domain.assign.model.Assign;
 import com.sparta.njick.domain.assign.model.Assigns;
+import com.sparta.njick.domain.board.repository.BoardRepositoryImpl;
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import com.sparta.njick.domain.card.fixture.CardFixture;
@@ -30,6 +31,9 @@ class CardServiceTest implements CardFixture {
     @Mock
     CardRepositoryImpl cardRepository;
 
+    @Mock
+    BoardRepositoryImpl boardRepository;
+
     @DisplayName("카드 생성 성공")
     @Test
     void createCard() {
@@ -39,6 +43,7 @@ class CardServiceTest implements CardFixture {
         given(cardRepository.assignAll(any(), any()))
             .willReturn(new Assigns(List.of(new Assign(1L,1L, 1L),
                 new Assign(2L , 2L, 1L))));
+        given(boardRepository.isParticipated(any(), any())).willReturn(true);
 
         //when
         CardResponseDto result = cardService.createCard(TEST_CREATE_REQUEST_DTO, TEST_BOARD_ID,
@@ -57,6 +62,7 @@ class CardServiceTest implements CardFixture {
         given(cardRepository.findAssignsByCardId(eq(TEST_CARD_ID)))
             .willReturn(new Assigns(List.of(new Assign(1L,1L, 1L),
                 new Assign(2L , 2L, 1L))));
+        given(boardRepository.isParticipated(any(), any())).willReturn(true);
 
         //when
         CardResponseDto result = cardService.getCard(TEST_USER_ID, TEST_BOARD_ID, TEST_CARD_ID);
@@ -75,6 +81,8 @@ class CardServiceTest implements CardFixture {
         given(cardRepository.reassignAll(any(), any()))
             .willReturn(new Assigns(List.of(new Assign(1L,4L, 1L),
                 new Assign(2L , 5L, 1L))));
+        given(boardRepository.isParticipated(any(), any())).willReturn(true);
+
         //when
         CardResponseDto result = cardService.updateCard(TEST_UPDATE_REQUEST_DTO, TEST_BOARD_ID,
             TEST_CARD_ID, TEST_USER_ID);

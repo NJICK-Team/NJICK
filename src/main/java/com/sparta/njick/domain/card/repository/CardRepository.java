@@ -22,4 +22,6 @@ public interface CardRepository {
     void deleteByTaskStateId(Long stateId);
 
     void deleteCard(Long cardId);
+
+    boolean isExist(Long cardId);
 }

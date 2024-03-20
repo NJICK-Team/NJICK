@@ -1,6 +1,7 @@
 package com.sparta.njick.domain.card.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.sparta.njick.domain.assign.model.Assign;
 import com.sparta.njick.domain.board.mock.FakeBoardRepository;
@@ -13,7 +14,6 @@ import com.sparta.njick.domain.card.mock.FakeCardRepository;
 import com.sparta.njick.domain.card.model.Card;
 import com.sparta.njick.global.exception.CustomRuntimeException;
 import java.time.LocalDateTime;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -127,6 +127,23 @@ public class CardServiceImplTest implements CardFixture {
     @Test
     void get_card_fail() {
         assertThatThrownBy(() -> cardService.getCard(TEST_USER_ID, TEST_BOARD_ID, TEST_CARD_ID))
+            .isInstanceOf(CustomRuntimeException.class);
+    }
+
+    @DisplayName("[성공] 카드를 삭제할 수 있다")
+    @Test
+    void delete_card_success() {
+        //given
+        fakeBoardRepository.setIsParticipate(true);
+
+        //when & then
+        assertDoesNotThrow(() -> cardService.deleteCard(TEST_BOARD_ID, TEST_CARD_ID, TEST_USER_ID));
+    }
+
+    @DisplayName("[예외] 보드에 참여중이지 않은 유저는 카드를 삭제할 수 없다")
+    @Test
+    void delete_card_fail() {
+        assertThatThrownBy(() -> cardService.deleteCard(TEST_BOARD_ID, TEST_CARD_ID, TEST_USER_ID))
             .isInstanceOf(CustomRuntimeException.class);
     }
 }

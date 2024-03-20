@@ -1,6 +1,7 @@
 package com.sparta.njick.domain.card.controller;
 
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
+import com.sparta.njick.domain.card.dto.request.CardUpdateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import com.sparta.njick.domain.card.service.CardService;
 import com.sparta.njick.domain.user.userDetails.UserDetailsImpl;
@@ -38,6 +39,17 @@ public class CardController {
         @PathVariable Long cardId) {
         CardResponseDto responseDto = cardService.getCard(userDetails.getUser().getId(),
             boardId, cardId);
+        return ResponseEntity.ok().body(responseDto);
+    }
+
+    @PostMapping("{cardId}")
+    public ResponseEntity<CardResponseDto> updateCard(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @PathVariable Long boardId,
+        @PathVariable Long cardId,
+        @RequestBody CardUpdateRequestDto requestDto) {
+        CardResponseDto responseDto = cardService.updateCard(requestDto, boardId, cardId,
+            userDetails.getUser().getId());
         return ResponseEntity.ok().body(responseDto);
     }
 }

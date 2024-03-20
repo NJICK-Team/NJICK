@@ -1,5 +1,6 @@
 package com.sparta.njick.domain.card.model;
 
+import com.sparta.njick.domain.card.dto.request.CardUpdateRequestDto;
 import com.sparta.njick.global.exception.CustomRuntimeException;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -27,5 +28,21 @@ public class Card {
         if (!Objects.equals(this.boardId, boardId)) {
             throw new CustomRuntimeException("해당 보드에 맞는 카드가 아닙니다.");
         }
+    }
+
+    public Card update(CardUpdateRequestDto requestDto, Long boardId) {
+        validateBoardId(boardId);
+        return Card.builder()
+            .id(this.id)
+            .title(requestDto.getTitle())
+            .description(requestDto.getDescription())
+            .cardColor(requestDto.getCardColor())
+            .deadline(requestDto.getDeadline())
+            .taskStateId(requestDto.getTaskStateId())
+            .boardId(boardId)
+            .createdAt(this.createdAt)
+            .updatedAt(this.updatedAt)
+            .creatorId(this.creatorId)
+            .build();
     }
 }

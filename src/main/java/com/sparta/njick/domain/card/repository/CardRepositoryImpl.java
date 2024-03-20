@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.njick.domain.assign.infrastructure.AssignEntity;
 import com.sparta.njick.domain.assign.infrastructure.AssignJpaRepository;
 import com.sparta.njick.domain.assign.model.Assign;
+import com.sparta.njick.domain.assign.model.Assigns;
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.infrastructure.entity.CardEntity;
 import com.sparta.njick.domain.card.infrastructure.entity.CardJpaRepository;
@@ -36,24 +37,42 @@ public class CardRepositoryImpl implements CardRepository {
     }
 
     @Override
-    public List<Assign> assignAll(List<Long> assignedUserIds, Long cardId) {
+    public Assigns assignAll(List<Long> assignedUserIds, Long cardId) {
         List<AssignEntity> entities = assignedUserIds.stream()
             .map(assignedUserId -> AssignEntity.builder()
                 .cardId(cardId)
                 .userId(assignedUserId)
                 .build())
             .toList();
-        return assignJpaRepository.saveAll(entities).stream()
+        List<Assign> assigns = assignJpaRepository.saveAll(entities).stream()
             .map(AssignEntity::toModel)
             .toList();
+        return new Assigns(assigns);
     }
 
     @Override
-    public List<Assign> findAssignsByCardId(Long cardId) {
-        List<AssignEntity> entities = assignJpaRepository.findAllByCardId(cardId);
-        return entities.stream()
+    public Assigns findAssignsByCardId(Long cardId) {
+        List<AssignEntity> entities = findAssigns(cardId);
+        List<Assign> assigns = entities.stream()
             .map(AssignEntity::toModel)
             .toList();
+        return new Assigns(assigns);
+    }
+
+    @Override
+    public Card update(Card updateCard) {
+        return cardJpaRepository
+            .saveAndFlush(CardEntity.fromModel(updateCard))
+            .toModel();
+    }
+
+    @Override
+    public Assigns reassignAll(List<Long> assignedUserIds, Long cardId) {
+        List<AssignEntity> entities = findAssigns(cardId);
+        if (!entities.isEmpty()) {
+            assignJpaRepository.deleteAllByCardId(cardId);
+        }
+        return assignAll(assignedUserIds, cardId);
     }
 
     @Override
@@ -65,6 +84,10 @@ public class CardRepositoryImpl implements CardRepository {
     public Card get(Long cardId) {
         CardEntity found = findById(cardId);
         return found.toModel();
+    }
+
+    private List<AssignEntity> findAssigns(Long cardId) {
+        return assignJpaRepository.findAllByCardId(cardId);
     }
 
     private CardEntity findById(Long cardId) {

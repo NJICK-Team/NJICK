@@ -14,4 +14,6 @@ public interface CardRepository {
     void assignAll(List<Assign> assigns);
 
     List<Assign> findAssignsByCardId(Long cardId);
+
+    void deleteByTaskStateId(Long stateId);
 }

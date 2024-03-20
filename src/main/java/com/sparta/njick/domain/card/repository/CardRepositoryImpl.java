@@ -77,13 +77,22 @@ public class CardRepositoryImpl implements CardRepository {
 
     @Override
     public void deleteByTaskStateId(Long stateId) {
-
+        List<CardEntity> found = cardJpaRepository.findAllByTaskStateId(stateId);
+        for (CardEntity cardEntity : found) {
+            assignJpaRepository.deleteAllByCardId(cardEntity.getId());
+        }
+        cardJpaRepository.deleteAll(found);
     }
 
     @Override
     public void deleteCard(Long cardId) {
         cardJpaRepository.deleteById(cardId);
         assignJpaRepository.deleteAllByCardId(cardId);
+    }
+
+    @Override
+    public boolean isExist(Long cardId) {
+        return cardJpaRepository.findById(cardId).isPresent();
     }
 
     @Override

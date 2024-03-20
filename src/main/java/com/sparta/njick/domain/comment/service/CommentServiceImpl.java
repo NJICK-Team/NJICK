@@ -76,8 +76,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void isExist(Long cardId) {
-        if (!cardRepository.isExist(cardId)) {
+        //TODO isExist() 구현 후 주석 해제
+       /* if (!cardRepository.isExist(cardId)) {
             throw new EntityNotFoundException("카드가 없습니다.");
-        }
+        }*/
     }
 }

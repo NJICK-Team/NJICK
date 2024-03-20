@@ -1,5 +1,8 @@
 package com.sparta.njick.global.exception;
 
+import com.sparta.njick.domain.comment.exception.CustomCommentException;
+import com.sparta.njick.domain.taskState.common.CommonResponseDto;
+import com.sparta.njick.domain.taskState.exception.CustomTaskStateException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
@@ -48,5 +51,17 @@ public class GlobalCustomExceptionHandler {
     public ResponseEntity<ErrorResponse> ConflictExceptionHandler(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(CustomTaskStateException.class)
+    public ResponseEntity<CommonResponseDto<Void>> customTaskStateExceptionHandler(
+        CustomTaskStateException e) {
+        return CommonResponseDto.of(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+    }
+
+    @ExceptionHandler(CustomCommentException.class)
+    public ResponseEntity<CommonResponseDto<Void>> customCommentExceptionHandler(
+        CustomCommentException e) {
+        return CommonResponseDto.of(HttpStatus.BAD_REQUEST, e.getMessage(), null);
     }
 }

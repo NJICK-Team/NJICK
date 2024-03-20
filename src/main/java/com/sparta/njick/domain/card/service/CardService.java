@@ -11,4 +11,6 @@ public interface CardService {
     CardResponseDto getCard(Long userId, Long boardId, Long cardId);
 
     CardResponseDto updateCard(CardUpdateRequestDto requestDto, Long boardId, Long cardId, Long userId);
+
+    void deleteCard(Long boardId, Long cardId, Long userId);
 }

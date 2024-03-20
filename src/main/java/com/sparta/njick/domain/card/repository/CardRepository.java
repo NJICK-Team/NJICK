@@ -20,4 +20,6 @@ public interface CardRepository {
     Assigns reassignAll(List<Long> assignedUserIds, Long cardId);
 
     void deleteByTaskStateId(Long stateId);
+
+    void deleteCard(Long cardId);
 }

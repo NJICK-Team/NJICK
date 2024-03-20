@@ -8,6 +8,7 @@ import com.sparta.njick.domain.user.userDetails.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,5 +52,14 @@ public class CardController {
         CardResponseDto responseDto = cardService.updateCard(requestDto, boardId, cardId,
             userDetails.getUser().getId());
         return ResponseEntity.ok().body(responseDto);
+    }
+
+    @DeleteMapping("{cardId}")
+    public ResponseEntity<Void> deleteCard(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @PathVariable Long boardId,
+        @PathVariable Long cardId) {
+        cardService.deleteCard(boardId, cardId, userDetails.getUser().getId());
+        return ResponseEntity.ok().build();
     }
 }

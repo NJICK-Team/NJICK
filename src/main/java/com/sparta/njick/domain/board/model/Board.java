@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 public class Board {
     private Long id;
     private String title;

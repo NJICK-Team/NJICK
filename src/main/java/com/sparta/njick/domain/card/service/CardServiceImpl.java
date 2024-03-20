@@ -62,4 +62,15 @@ public class CardServiceImpl implements CardService {
         Assigns assigns = cardRepository.reassignAll(requestDto.getAssignedUserIds(), cardId);
         return new CardResponseDto(updated, assigns.getAssigns());
     }
+
+    @Override
+    public void deleteCard(Long boardId, Long cardId, Long userId) {
+        if (!boardRepository.isParticipated(boardId, userId)) {
+            throw new CustomRuntimeException("해당 보드에 참여중인 유저가 아닙니다.");
+        }
+        Card card = cardRepository.get(cardId);
+        card.validateBoardId(boardId);
+
+        cardRepository.deleteCard(cardId);
+    }
 }

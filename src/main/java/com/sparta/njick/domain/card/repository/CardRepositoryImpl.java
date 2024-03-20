@@ -81,6 +81,12 @@ public class CardRepositoryImpl implements CardRepository {
     }
 
     @Override
+    public void deleteCard(Long cardId) {
+        cardJpaRepository.deleteById(cardId);
+        assignJpaRepository.deleteAllByCardId(cardId);
+    }
+
+    @Override
     public Card get(Long cardId) {
         CardEntity found = findById(cardId);
         return found.toModel();

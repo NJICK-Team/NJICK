@@ -13,11 +13,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE cards SET deleted_at = NOW() WHERE id = ?")
+@SQLRestriction(value = "deleted_at is NULL")
 @Table(name = "cards")
 @Entity
 public class CardEntity extends BaseAuditing {

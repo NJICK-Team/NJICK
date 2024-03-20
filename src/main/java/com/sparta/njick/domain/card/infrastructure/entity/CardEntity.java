@@ -49,6 +49,7 @@ public class CardEntity extends BaseAuditing {
 
     public Card toModel() {
         return Card.builder()
+            .id(id)
             .title(title)
             .description(description)
             .cardColor(cardColor)

@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.njick.domain.assign.infrastructure.AssignEntity;
 import com.sparta.njick.domain.assign.infrastructure.AssignJpaRepository;
 import com.sparta.njick.domain.assign.model.Assign;
-import com.sparta.njick.domain.card.dto.CardInfoDto;
+import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.infrastructure.entity.CardEntity;
 import com.sparta.njick.domain.card.infrastructure.entity.CardJpaRepository;
 import com.sparta.njick.domain.card.model.Card;
@@ -22,29 +22,30 @@ public class CardRepositoryImpl implements CardRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public CardInfoDto save(Card model) {
+    public Card save(CardCreateRequestDto requestDto, Long boardId, Long userId) {
         CardEntity entity = CardEntity.builder()
-            .title(model.getTitle())
-            .description(model.getDescription())
-            .cardColor(model.getCardColor())
-            .deadline(model.getDeadline())
-            .boardId(model.getBoardId())
-            .taskStateId(model.getTaskStateId())
-            .creatorId(model.getCreatorId())
+            .title(requestDto.getTitle())
+            .description(requestDto.getDescription())
+            .cardColor(requestDto.getCardColor())
+            .deadline(requestDto.getDeadline())
+            .boardId(boardId)
+            .taskStateId(requestDto.getTaskStateId())
+            .creatorId(userId)
             .build();
-        CardEntity saved = cardJpaRepository.save(entity);
-        return new CardInfoDto(saved);
+        return cardJpaRepository.save(entity).toModel();
     }
 
     @Override
-    public void assignAll(List<Assign> assigns) {
-        List<AssignEntity> entities = assigns.stream()
-            .map(it -> AssignEntity.builder()
-                .cardId(it.getCardId())
-                .userId(it.getUserId())
+    public List<Assign> assignAll(List<Long> assignedUserIds, Long cardId) {
+        List<AssignEntity> entities = assignedUserIds.stream()
+            .map(assignedUserId -> AssignEntity.builder()
+                .cardId(cardId)
+                .userId(assignedUserId)
                 .build())
             .toList();
-        assignJpaRepository.saveAll(entities);
+        return assignJpaRepository.saveAll(entities).stream()
+            .map(AssignEntity::toModel)
+            .toList();
     }
 
     @Override

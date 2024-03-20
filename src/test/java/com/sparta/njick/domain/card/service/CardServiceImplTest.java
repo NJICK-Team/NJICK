@@ -6,6 +6,7 @@ import com.sparta.njick.domain.assign.model.Assign;
 import com.sparta.njick.domain.board.mock.FakeBoardRepository;
 import com.sparta.njick.domain.board.model.Board;
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
+import com.sparta.njick.domain.card.dto.request.CardUpdateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import com.sparta.njick.domain.card.fixture.CardFixture;
 import com.sparta.njick.domain.card.mock.FakeCardRepository;
@@ -64,11 +65,11 @@ public class CardServiceImplTest implements CardFixture {
         fakeBoardRepository.setIsParticipate(true);
 
         //when
-        CardResponseDto response = cardService.createCard(dto, TEST_BOARD_ID, TEST_USER_ID);
+        CardResponseDto responseDto = cardService.createCard(dto, TEST_BOARD_ID, TEST_USER_ID);
 
         //then
-        assertThat(response.getTitle()).isEqualTo(TEST_TITLE);
-        assertThat(response.getAssignedUserIds().size()).isEqualTo(1);
+        assertThat(responseDto.getTitle()).isEqualTo(TEST_TITLE);
+        assertThat(responseDto.getAssignedUserIds().size()).isEqualTo(1);
     }
 
     @DisplayName("[예외] 보드에 등록되지 않은 사용자는 카드를 만들 수 없다")
@@ -79,6 +80,33 @@ public class CardServiceImplTest implements CardFixture {
 
         //when & then
         assertThatThrownBy(() -> cardService.createCard(dto, TEST_BOARD_ID, TEST_USER_ID))
+            .isInstanceOf(CustomRuntimeException.class);
+    }
+
+    @DisplayName("[성공] 카드를 수정할 수 있다")
+    @Test
+    void update_card_success() {
+        //given
+        CardUpdateRequestDto dto = TEST_UPDATE_REQUEST_DTO;
+        fakeBoardRepository.setIsParticipate(true);
+
+        //when
+        CardResponseDto responseDto = cardService.updateCard(dto, TEST_BOARD_ID, TEST_CARD_ID,
+            TEST_USER_ID);
+
+        //then
+        assertThat(responseDto.getTitle()).isEqualTo(ANOTHER_PREFIX + TEST_TITLE);
+    }
+
+    @DisplayName("[예외] 보드에 참여하고 있지 않은 유저는 카드를 수정할 수 없다")
+    @Test
+    void update_card_fail() {
+        //given
+        CardUpdateRequestDto dto = TEST_UPDATE_REQUEST_DTO;
+
+        //when & then
+        assertThatThrownBy(() -> cardService.updateCard(dto, TEST_BOARD_ID, TEST_CARD_ID,
+            TEST_USER_ID))
             .isInstanceOf(CustomRuntimeException.class);
     }
 }

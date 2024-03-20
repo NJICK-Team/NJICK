@@ -59,4 +59,17 @@ public class CardEntity extends BaseAuditing {
             .creatorId(creatorId)
             .build();
     }
+
+    public static CardEntity fromModel(Card model) {
+        return CardEntity.builder()
+            .id(model.getId())
+            .title(model.getTitle())
+            .description(model.getDescription())
+            .cardColor(model.getCardColor())
+            .deadline(model.getDeadline())
+            .boardId(model.getBoardId())
+            .taskStateId(model.getTaskStateId())
+            .creatorId(model.getCreatorId())
+            .build();
+    }
 }

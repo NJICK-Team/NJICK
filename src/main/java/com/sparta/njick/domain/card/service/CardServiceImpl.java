@@ -1,12 +1,11 @@
 package com.sparta.njick.domain.card.service;
 
-import com.sparta.njick.domain.assign.model.Assign;
+import com.sparta.njick.domain.assign.model.Assigns;
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.dto.request.CardUpdateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import com.sparta.njick.domain.card.model.Card;
 import com.sparta.njick.domain.card.repository.CardRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +22,9 @@ public class CardServiceImpl implements CardService {
         //보드에 초대된 사용자인지 검증
 
         Card card = cardRepository.save(requestDto, boardId, userId);
-        List<Assign> assigns = cardRepository.assignAll(
+        Assigns assigns = cardRepository.assignAll(
             requestDto.getAssignedUserIds(), card.getId());
-        return new CardResponseDto(card, assigns);
+        return new CardResponseDto(card, assigns.getAssigns());
     }
 
     @Override
@@ -36,16 +35,21 @@ public class CardServiceImpl implements CardService {
         Card found = cardRepository.get(cardId);
         found.validateBoardId(boardId);
 
-        List<Assign> assigns = cardRepository.findAssignsByCardId(cardId);
+        Assigns assigns = cardRepository.findAssignsByCardId(cardId);
 
-        return new CardResponseDto(found, assigns);
+        return new CardResponseDto(found, assigns.getAssigns());
     }
 
     @Override
+    @Transactional
     public CardResponseDto updateCard(CardUpdateRequestDto requestDto, Long boardId, Long cardId,
         Long userId) {
         //보드에 초대된 사용자인지 검증
+        Card found = cardRepository.get(cardId);
+        Card updateCard = found.update(requestDto, boardId);
+        Card updated = cardRepository.update(updateCard);
 
-        return null;
+        Assigns assigns = cardRepository.reassignAll(requestDto.getAssignedUserIds(), cardId);
+        return new CardResponseDto(updated, assigns.getAssigns());
     }
 }

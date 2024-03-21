@@ -49,12 +49,17 @@ public class BoardEntity extends BaseAuditing {
     }
 
     public static BoardEntity fromModel(Board board) {
-        return BoardEntity.builder()
+        BoardEntity entity = BoardEntity.builder()
                 .id(board.getId())
                 .color(board.getColor())
                 .title(board.getTitle())
                 .description(board.getDescription())
                 .creatorId(board.getCreatorId())
                 .build();
+
+        entity.setCreatedAt(board.getCreatedAt());
+        entity.setUpdatedAt(board.getUpdatedAt());
+        entity.setDeletedAt(board.getDeletedAt());
+        return entity;
     }
 }

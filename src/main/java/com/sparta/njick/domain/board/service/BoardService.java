@@ -14,5 +14,6 @@ public interface BoardService {
     List<BoardInfoDTO> searchAllParticipateBoard(final Long boardId);
     List<BoardInfoDTO> searchAllOwnedBoard(final Long creatorId);
     BoardInfoDTO update(final UpdateBoardDTO dto);
+    BoardInfoDTO searchById(final Long id);
     void delete(final DeleteBoardDTO dto);
 }

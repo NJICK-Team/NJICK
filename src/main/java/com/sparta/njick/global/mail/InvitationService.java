@@ -59,7 +59,6 @@ public class InvitationService {
             final BoardInfoDTO info
     ) throws MessagingException {
         String authCode = AuthCodeUtil.generateAuthCode(10);
-
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         mimeMessage.addRecipients(MimeMessage.RecipientType.TO, receiver.getEmail());
         mimeMessage.setSubject(generateSubject(receiver, invitor, info));
@@ -100,6 +99,7 @@ public class InvitationService {
                 invitor,
                 boardInfoDTO
         );
+
         mailSender.send(emailForm);
     }
 
@@ -108,6 +108,7 @@ public class InvitationService {
             final String authCode
     ) {
         String codeFromRedis = redisUtil.getData(email);
+
         if (codeFromRedis == null) {
             return false;
         }

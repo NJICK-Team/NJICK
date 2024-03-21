@@ -12,7 +12,6 @@ public class BoardViewController {
 
     @GetMapping("/{boardId}")
     public String getBoard(@PathVariable("boardId") Long boardId, Model model) {
-        System.out.println("Board Id: " + boardId);
         model.addAttribute("boardId", boardId);
         return "/board/boardView";
     }

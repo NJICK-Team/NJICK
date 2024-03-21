@@ -1,14 +1,13 @@
 package com.sparta.njick.domain.board.service;
 
+import com.sparta.njick.domain.board.controller.dto.request.BoardParticipateDTO;
 import com.sparta.njick.domain.board.controller.dto.request.BoardRegisterDTO;
 import com.sparta.njick.domain.board.controller.dto.request.DeleteBoardDTO;
 import com.sparta.njick.domain.board.controller.dto.request.UpdateBoardDTO;
 import com.sparta.njick.domain.board.model.Board;
 import com.sparta.njick.domain.board.repository.BoardRepository;
 import com.sparta.njick.domain.board.service.dto.BoardInfoDTO;
-import com.sparta.njick.domain.board.controller.dto.request.BoardParticipateDTO;
 import com.sparta.njick.global.exception.CustomRuntimeException;
-import com.sparta.njick.global.exception.errorcode.BoardErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -36,12 +35,16 @@ public class BoardServiceImpl implements BoardService {
         return BoardInfoDTO.from(registered);
     }
 
+    public BoardInfoDTO searchById(final Long id) {
+        return BoardInfoDTO.from(boardRepository.findById(id));
+    }
+
     @Override
     public void participate(final BoardParticipateDTO dto) {
         if (boardRepository.findById(dto.boardId()) == null) {
             throw new CustomRuntimeException(BOARD_NOT_FOUND.getMessage());
         }
-        if(boardRepository.isParticipated(dto.boardId(), dto.participatorId())){
+        if (boardRepository.isParticipated(dto.boardId(), dto.participatorId())) {
             throw new CustomRuntimeException(DUPLICATE_PARTICIPATION.getMessage());
         }
 
@@ -85,7 +88,7 @@ public class BoardServiceImpl implements BoardService {
     public void delete(final DeleteBoardDTO dto) {
         Board board = boardRepository.findById(dto.boardId());
 
-        if (board.isNotOwner(dto.requestUserId())){
+        if (board.isNotOwner(dto.requestUserId())) {
             throw new CustomRuntimeException(UN_AUTHORIZED.getMessage());
         }
 

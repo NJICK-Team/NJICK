@@ -5,6 +5,7 @@ import com.sparta.njick.domain.user.dto.request.PasswordUpdateRequest;
 import com.sparta.njick.domain.user.dto.request.SignUpRequest;
 import com.sparta.njick.domain.user.entity.User;
 import com.sparta.njick.domain.user.repository.UserRepository;
+import com.sparta.njick.global.exception.CustomRuntimeException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
@@ -34,6 +35,11 @@ public class UserService {
             .password(password)
             .nickname(nickname)
             .build());
+    }
+
+    public User searchByEmail (String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomRuntimeException("[ERROR] 사용자를 찾을 수 없습니다."));
     }
 
     public void updatePassword(PasswordUpdateRequest request, User user) {

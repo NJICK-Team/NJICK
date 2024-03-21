@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>워크스페이스 초대 메일</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #292929 !important;
+        }
+
+        #app {
+            width: 900px;
+            margin-top:3rem;
+        }
+    </style>
+</head>
+<body>
+<div id="app" style="margin-bottom: 10px; color: #292929;">
+    <h1 style="color:#292929;">[[${invitor}]] 님이 [[${workspace}]] 워크스페이스 초대장을 보냈습니다.</h1>
+    <br/>
+    <h3 style="text-align: center; margin-bottom: 2rem;">아래의 링크와 인증 번호를 통해서 합류하실 수 있습니다.</h3>
+
+    <div style="text-align: left; color: #292929; margin-bottom: 2rem; border: 1px solid #712cf9; padding: 1rem">
+        워크스페이스 링크: [[${urls}]]
+    </div>
+
+    <div style="text-align: left; color: #292929; border: 1px solid #712cf9; padding: 1rem">
+        <span style="display: inline-block;margin-bottom: .5rem">인증 번호: [[${code}]]</span><br/>
+        <small style="color: crimson">(주의) 인증 번호는 <strong>2일간</strong> 유효합니다. 만약 유효 기간이 지난 경우, 워크스페이스 초대를 위한 재요청이 필요합니다.</small>
+    </div>
+
+</div>
+</body>
+</html>

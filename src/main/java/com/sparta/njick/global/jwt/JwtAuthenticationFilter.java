@@ -1,12 +1,13 @@
 package com.sparta.njick.global.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.njick.domain.user.userDetails.UserDetailsImpl;
 import com.sparta.njick.domain.user.dto.request.SignInRequest;
+import com.sparta.njick.domain.user.userDetails.UserDetailsImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,12 +34,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 SignInRequest.class);
 
             return getAuthenticationManager().authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    requestDto.getEmail(),
-                    requestDto.getPassword(),
-                    null
-                )
-            );
+                new UsernamePasswordAuthenticationToken(requestDto.getEmail(),
+                    requestDto.getPassword(), null));
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new AuthenticationServiceException(e.getMessage());
@@ -47,20 +44,32 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
-        HttpServletResponse response, FilterChain chain, Authentication authResult) {
+        HttpServletResponse response, FilterChain chain, Authentication authResult)
+        throws IOException {
         String email = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
 
         String token = jwtUtility.createToken(email);
         response.addHeader(JwtUtility.AUTHORIZATION_HEADER, token);
+        response.setStatus(200);
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        out.print("{");
+        out.print("\"status\": \"OK\",");
+        out.print("\"message\": \"로그인 성공\"");
+        out.print("}");
+        out.flush();
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request,
-        HttpServletResponse response, AuthenticationException failed)
-        throws IOException {
+        HttpServletResponse response, AuthenticationException failed) throws IOException {
         response.setStatus(401);
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("로그인에 실패했습니다.");
+        PrintWriter out = response.getWriter();
+        out.print("{");
+        out.print("\"status\": \"UNAUTHORIZED\",");
+        out.print("\"message\": \"로그인 실패\"");
+        out.print("}");
+        out.flush();
     }
 }

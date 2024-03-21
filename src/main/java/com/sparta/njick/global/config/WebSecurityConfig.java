@@ -5,7 +5,6 @@ import com.sparta.njick.global.jwt.JwtAuthenticationFilter;
 import com.sparta.njick.global.jwt.JwtAuthorizationFilter;
 import com.sparta.njick.global.jwt.JwtUtility;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -63,7 +62,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
             authorizeHttpRequests
                 .requestMatchers("/").permitAll()
-                .requestMatchers("/api/v1/users/signup", "/api/v1/users/singin").permitAll()
+                .requestMatchers("/api/v1/users/signup", "/api/v1/users/signin").permitAll()
                 .anyRequest().authenticated()
         );
 

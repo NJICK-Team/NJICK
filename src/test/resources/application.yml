@@ -12,3 +12,12 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+  data:
+    redis:
+      port: 6379
+      host: localhost
+
+  mail:
+    host:
+    port:
+    username:

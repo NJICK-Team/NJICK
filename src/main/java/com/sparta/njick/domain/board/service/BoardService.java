@@ -20,4 +20,5 @@ public interface BoardService {
     BoardInfoDTO update(final Long boardId, final UpdateBoardDTO dto, final Long requestId);
 
     void delete(final Long boardId, final Long requestId);
+    BoardInfoDTO searchById(final Long id);
 }

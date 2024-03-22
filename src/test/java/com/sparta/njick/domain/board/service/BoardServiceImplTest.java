@@ -1,17 +1,17 @@
 package com.sparta.njick.domain.board.service;
 
+import com.sparta.njick.domain.board.controller.dto.request.BoardParticipateDTO;
 import com.sparta.njick.domain.board.controller.dto.request.BoardRegisterDTO;
-import com.sparta.njick.domain.board.controller.dto.request.DeleteBoardDTO;
 import com.sparta.njick.domain.board.controller.dto.request.UpdateBoardDTO;
 import com.sparta.njick.domain.board.mock.FakeBoardRepository;
 import com.sparta.njick.domain.board.model.Board;
 import com.sparta.njick.domain.board.service.dto.BoardInfoDTO;
-import com.sparta.njick.domain.board.controller.dto.request.BoardParticipateDTO;
 import com.sparta.njick.global.exception.CustomRuntimeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -21,9 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("보드 서비스 레이어 유닛 테스트")
 class BoardServiceImplTest {
-    @Autowired
     private BoardServiceImpl boardService;
-
     private FakeBoardRepository fakeBoardRepository;
 
     @BeforeEach
@@ -49,10 +47,10 @@ class BoardServiceImplTest {
         String description = "test description";
         String color = "ffffff";
         Long creatorId = 1L;
-        BoardRegisterDTO boardRegisterRequestDTO = new BoardRegisterDTO(title, description, color, creatorId);
+        BoardRegisterDTO boardRegisterRequestDTO = new BoardRegisterDTO(title, description, color);
 
         //when
-        BoardInfoDTO register = boardService.register(boardRegisterRequestDTO);
+        BoardInfoDTO register = boardService.register(boardRegisterRequestDTO, creatorId);
 
         //then
         assertThat(register).isNotNull();
@@ -68,10 +66,10 @@ class BoardServiceImplTest {
         String newTitle = "test title";
         String newDescription = "test description";
         String newColor = "ffffff";
-        UpdateBoardDTO boardDTO = new UpdateBoardDTO(1L, 1L, newTitle, newDescription, newColor);
+        UpdateBoardDTO boardDTO = new UpdateBoardDTO(newTitle, newDescription, newColor);
 
         //when
-        BoardInfoDTO register = boardService.update(boardDTO);
+        BoardInfoDTO register = boardService.update(1L, boardDTO, 1L);
 
         //then
         assertThat(register).isNotNull();
@@ -87,10 +85,10 @@ class BoardServiceImplTest {
         String newTitle = "test title";
         String newDescription = "test description";
         String newColor = "ffffff";
-        UpdateBoardDTO boardDTO = new UpdateBoardDTO(1L, 100L, newTitle, newDescription, newColor);
+        UpdateBoardDTO boardDTO = new UpdateBoardDTO(newTitle, newDescription, newColor);
 
         //when & then
-        assertThatThrownBy(() -> boardService.update(boardDTO))
+        assertThatThrownBy(() -> boardService.update(1L, boardDTO, 100L))
                 .isInstanceOf(CustomRuntimeException.class)
                 .hasMessage("[ERROR] 권한이 없습니다");
     }
@@ -98,21 +96,15 @@ class BoardServiceImplTest {
     @Test
     @DisplayName("[성공] 보드의 생성자는 보드를 삭제할 수 있다")
     void when_delete_request_by_creator_expect_delete_board() {
-        //given
-        DeleteBoardDTO boardDTO = new DeleteBoardDTO(1L, 1L);
-
-        //when & then
-        assertDoesNotThrow(() -> boardService.delete(boardDTO));
+        //given & when & then
+        assertDoesNotThrow(() -> boardService.delete(1L, 1L));
     }
 
     @Test
     @DisplayName("[예외] 보드의 생성자가 아닌 사용자가 삭제 요청시 예외가 발생한다")
     void when_delete_request_by_not_creator_expect_throw_exception() {
-        //given
-        DeleteBoardDTO boardDTO = new DeleteBoardDTO(1L, 100L);
-
-        //when & then
-        assertThatThrownBy(() -> boardService.delete(boardDTO))
+        //given & when & then
+        assertThatThrownBy(() -> boardService.delete(1L, 100L))
                 .isInstanceOf(CustomRuntimeException.class)
                 .hasMessage("[ERROR] 권한이 없습니다");
     }
@@ -140,7 +132,7 @@ class BoardServiceImplTest {
         BoardParticipateDTO dto = new BoardParticipateDTO(100L, 1L);
 
         //when & then
-        assertThatThrownBy(() ->  boardService.participate(dto))
+        assertThatThrownBy(() -> boardService.participate(dto))
                 .isInstanceOf(CustomRuntimeException.class)
                 .hasMessage("[ERROR] 잘못된 요청입니다");
     }
@@ -160,7 +152,8 @@ class BoardServiceImplTest {
     @DisplayName("[성공] 사용자는 생성한 전체 보드를 조회할 수 있다")
     void when_searchAllOwnedBoard_expect_list_of_board() {
         //given & when
-        List<BoardInfoDTO> result = boardService.searchAllOwnedBoard(1L);
+        Pageable pageable = PageRequest.of(0, 10);
+        List<BoardInfoDTO> result = boardService.searchAllOwnedBoard(1L, pageable);
 
         //then
         assertThat(result).isNotNull();
@@ -172,7 +165,8 @@ class BoardServiceImplTest {
     @DisplayName("[성공] 사용자는 참여하고 있는 전체 보드를 조회할 수 있다")
     void when_searchAllParticipateBoard_expect_list_of_board() {
         //given & when
-        List<BoardInfoDTO> result = boardService.searchAllParticipateBoard(1L);
+        Pageable pageable = PageRequest.of(0, 10);
+        List<BoardInfoDTO> result = boardService.searchAllParticipateBoard(1L, pageable);
 
         //then
         assertThat(result).isNotNull();

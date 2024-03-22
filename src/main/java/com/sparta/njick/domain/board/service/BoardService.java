@@ -11,9 +11,12 @@ import java.util.List;
 public interface BoardService {
     BoardInfoDTO register(final BoardRegisterDTO dto);
     void participate(final BoardParticipateDTO dto);
-    List<BoardInfoDTO> searchAllParticipateBoard(final Long boardId);
-    List<BoardInfoDTO> searchAllOwnedBoard(final Long creatorId);
-    BoardInfoDTO update(final UpdateBoardDTO dto);
-    BoardInfoDTO searchById(final Long id);
-    void delete(final DeleteBoardDTO dto);
+
+    List<BoardInfoDTO> searchAllParticipateBoard(final Long boardId, final Pageable pageable);
+
+    List<BoardInfoDTO> searchAllOwnedBoard(final Long creatorId, final Pageable pageable);
+
+    BoardInfoDTO update(final Long boardId, final UpdateBoardDTO dto, final Long requestId);
+
+    void delete(final Long boardId, final Long requestId);
 }

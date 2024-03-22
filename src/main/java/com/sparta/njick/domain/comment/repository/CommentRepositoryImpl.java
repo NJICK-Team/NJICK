@@ -25,16 +25,25 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public CommentModel update(Long commentId, String content) {
+    public CommentModel update(Long commentId, String content, Long userId) {
         Comment comment = commentJpaRepository.findById(commentId).orElseThrow(
             () -> new CustomCommentException(CommentErrorCode.COMMENT_ERROR_CODE_NOT_FOUND)
         );
+        if (!userId.equals(comment.getWriterId())) {
+            throw new CustomCommentException(CommentErrorCode.COMMENT_ERROR_IS_NOT_WRITER);
+        }
         comment.update(content);
         return comment.toModel();
     }
 
     @Override
-    public void deleteById(Long commentId) {
+    public void deleteById(Long commentId, Long userId) {
+        Comment comment = commentJpaRepository.findById(commentId).orElseThrow(
+            () -> new CustomCommentException(CommentErrorCode.COMMENT_ERROR_CODE_NOT_FOUND)
+        );
+        if (!userId.equals(comment.getWriterId())) {
+            throw new CustomCommentException(CommentErrorCode.COMMENT_ERROR_IS_NOT_WRITER);
+        }
         commentJpaRepository.deleteById(commentId);
     }
 

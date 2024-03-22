@@ -7,6 +7,7 @@ import com.sparta.njick.domain.taskState.dto.responseDto.TaskStateResponseDto;
 import com.sparta.njick.domain.taskState.entity.TaskState;
 import com.sparta.njick.domain.taskState.model.TaskStateModel;
 import com.sparta.njick.domain.taskState.repository.TaskStateRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class TaskStateServiceImpl implements TaskStateService {
 
     @Override
     public void createTaskState(TaskStateRequestDto requestDto, Long userId) {
-        boardRepository.isParticipated(requestDto.getBoardId(), userId);
+        isParticipated(requestDto.getBoardId(), userId);
 
         taskStateRepository.save(new TaskState(requestDto));
     }
@@ -32,7 +33,7 @@ public class TaskStateServiceImpl implements TaskStateService {
     @Override
     public TaskStateResponseDto updateTaskState(TaskStateRequestDto requestDto, Long stateId,
         Long userId) {
-        boardRepository.isParticipated(requestDto.getBoardId(), userId);
+        isParticipated(requestDto.getBoardId(), userId);
 
         TaskStateModel model = taskStateRepository.update(requestDto.getBoardId(),
             requestDto.getName(), stateId);
@@ -43,18 +44,15 @@ public class TaskStateServiceImpl implements TaskStateService {
     @Override
     public void deleteTaskState(Long stateId, Long userId) {
         TaskStateModel model = taskStateRepository.findByIdOrElseThrow(stateId);
-        Long boardId = model.getBoardId();
-        boardRepository.isParticipated(boardId, userId);
+        isParticipated(model.getBoardId(), userId);
 
         taskStateRepository.delete(stateId);
-
-        //TODO 해당 stateId를 가진 카드를 다 가져옴 => delete
         cardRepository.deleteByTaskStateId(stateId);
     }
 
     @Override
     public List<TaskStateResponseDto> getTaskStates(Long boardId, Long userId) {
-        boardRepository.isParticipated(boardId, userId);
+        isParticipated(boardId, userId);
 
         List<TaskStateResponseDto> response = new ArrayList<>();
         List<TaskStateModel> models = taskStateRepository.findAllByBoardId(boardId);
@@ -66,4 +64,9 @@ public class TaskStateServiceImpl implements TaskStateService {
         return response;
     }
 
+    private void isParticipated(Long boardId, Long userId) {
+        if (!boardRepository.isParticipated(boardId, userId)) {
+            throw new EntityNotFoundException("보드에 초대된 사용자가 아닙니다.");
+        }
+    }
 }

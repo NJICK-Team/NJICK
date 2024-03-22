@@ -10,9 +10,9 @@ public interface CommentRepository {
 
     List<CommentModel> findAllByCardId(Long cardId);
 
-    CommentModel update(Long commentId, String content);
+    CommentModel update(Long commentId, String content, Long userId);
 
-    void deleteById(Long commentId);
+    void deleteById(Long commentId, Long userId);
 
     void findByIdOrElseThrow(Long commentId);
 }

@@ -14,9 +14,16 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> register(@RequestBody BoardRegisterDTO dto) {
-        // TODO: TBD -> will be replace login user id
-        return ResponseEntity.ok(ResponseDTO.success(boardService.register(dto)));
+    public ResponseEntity<ResponseDTO> register(
+            @RequestBody BoardRegisterDTO dto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return ResponseEntity.ok(ResponseDTO.success(
+                boardService.register(
+                        dto,
+                        userDetails.getUser().getId()
+                ))
+        );
     }
 
     @GetMapping
@@ -32,19 +39,34 @@ public class BoardController {
     }
 
     @PostMapping("/participate")
-    public ResponseEntity<ResponseDTO> participate(@RequestBody BoardParticipateDTO dto){
+    public ResponseEntity<ResponseDTO> participate(
+            @RequestBody BoardParticipateDTO dto
+    ) {
         boardService.participate(dto);
         return ResponseEntity.ok(ResponseDTO.success(null));
     }
 
     @PutMapping("/{boardId}")
-    public ResponseEntity<ResponseDTO> update(@RequestBody UpdateBoardDTO dto){
-        return ResponseEntity.ok(ResponseDTO.success(boardService.update(dto)));
+    public ResponseEntity<ResponseDTO> update(
+            @PathVariable Long boardId,
+            @RequestBody UpdateBoardDTO dto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return ResponseEntity.ok(ResponseDTO.success(
+                boardService.update(
+                        boardId,
+                        dto,
+                        userDetails.getUser().getId()
+                ))
+        );
     }
 
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<ResponseDTO> delete(@RequestBody DeleteBoardDTO dto){
-        boardService.delete(dto);
+    public ResponseEntity<ResponseDTO> delete(
+            @PathVariable Long boardId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        boardService.delete(boardId, userDetails.getUser().getId());
         return ResponseEntity.ok(ResponseDTO.success(null));
     }
 }

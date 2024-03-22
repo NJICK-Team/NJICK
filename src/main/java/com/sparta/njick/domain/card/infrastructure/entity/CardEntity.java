@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ import org.hibernate.annotations.SQLRestriction;
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE cards SET deleted_at = NOW() WHERE id = ?")
 @SQLRestriction(value = "deleted_at is NULL")
-@Table(name = "cards")
+@Table(name = "cards", indexes = @Index(name = "idx_board_id", columnList = "board_id"))
 @Entity
 public class CardEntity extends BaseAuditing {
 

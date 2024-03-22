@@ -1,15 +1,16 @@
 package com.sparta.njick.domain.board.service;
 
+import com.sparta.njick.domain.board.controller.dto.request.BoardParticipateDTO;
 import com.sparta.njick.domain.board.controller.dto.request.BoardRegisterDTO;
-import com.sparta.njick.domain.board.controller.dto.request.DeleteBoardDTO;
 import com.sparta.njick.domain.board.controller.dto.request.UpdateBoardDTO;
 import com.sparta.njick.domain.board.service.dto.BoardInfoDTO;
-import com.sparta.njick.domain.board.controller.dto.request.BoardParticipateDTO;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface BoardService {
-    BoardInfoDTO register(final BoardRegisterDTO dto);
+    BoardInfoDTO register(final BoardRegisterDTO dto, final Long requestUserId);
+
     void participate(final BoardParticipateDTO dto);
 
     List<BoardInfoDTO> searchAllParticipateBoard(final Long boardId, final Pageable pageable);

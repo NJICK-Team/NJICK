@@ -8,6 +8,7 @@ import com.sparta.njick.domain.card.model.Card;
 import com.sparta.njick.domain.card.repository.CardRepository;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.data.domain.Pageable;
 
 public class FakeCardRepository implements CardRepository {
 
@@ -76,5 +77,10 @@ public class FakeCardRepository implements CardRepository {
     @Override
     public boolean isExist(Long cardId) {
         return Objects.equals(card.getId(), cardId);
+    }
+
+    @Override
+    public List<Card> getAllCards(Pageable pageable, Long boardId) {
+        return null;
     }
 }

@@ -1,10 +1,17 @@
 package com.sparta.njick.domain.board.controller;
 
-import com.sparta.njick.domain.board.controller.dto.request.*;
+import com.sparta.njick.domain.board.controller.dto.request.BoardParticipateDTO;
+import com.sparta.njick.domain.board.controller.dto.request.BoardRegisterDTO;
+import com.sparta.njick.domain.board.controller.dto.request.UpdateBoardDTO;
 import com.sparta.njick.domain.board.controller.dto.response.ResponseDTO;
 import com.sparta.njick.domain.board.service.BoardService;
+import com.sparta.njick.domain.user.userDetails.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,15 +34,29 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO> searchOwnedBoards(@RequestBody BoardSearchDTO dto) {
-        // TODO: TBD -> will be replace login user id
-        return ResponseEntity.ok(ResponseDTO.success(boardService.searchAllOwnedBoard(dto.requestUserId())));
+    public ResponseEntity<ResponseDTO> searchOwnedBoards(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return ResponseEntity.ok(ResponseDTO.success(
+                boardService.searchAllOwnedBoard(
+                        userDetails.getUser().getId(),
+                        pageable
+                ))
+        );
     }
 
     @GetMapping("/participated")
-    public ResponseEntity<ResponseDTO> searchParticipateBoards(@RequestBody BoardSearchDTO dto) {
-        // TODO: TBD -> will be replace login user id
-        return ResponseEntity.ok(ResponseDTO.success(boardService.searchAllParticipateBoard(dto.requestUserId())));
+    public ResponseEntity<ResponseDTO> searchParticipateBoards(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return ResponseEntity.ok(ResponseDTO.success(
+                boardService.searchAllParticipateBoard(
+                        userDetails.getUser().getId(),
+                        pageable
+                ))
+        );
     }
 
     @PostMapping("/participate")

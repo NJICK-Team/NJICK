@@ -1,10 +1,12 @@
 package com.sparta.njick.domain.card.controller;
 
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
+import com.sparta.njick.domain.card.dto.request.CardPageRequestDto;
 import com.sparta.njick.domain.card.dto.request.CardUpdateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import com.sparta.njick.domain.card.service.CardService;
 import com.sparta.njick.domain.user.userDetails.UserDetailsImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -61,5 +63,14 @@ public class CardController {
         @PathVariable Long cardId) {
         cardService.deleteCard(boardId, cardId, userDetails.getUser().getId());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CardResponseDto>> getAllCard(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @PathVariable Long boardId,
+        @RequestBody CardPageRequestDto pageRequestDto) {
+        List<CardResponseDto> responseDtos = cardService.getAllCards(1L, boardId, pageRequestDto);
+        return ResponseEntity.ok().body(responseDtos);
     }
 }

@@ -4,6 +4,7 @@ import com.sparta.njick.domain.assign.model.Assigns;
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
 import com.sparta.njick.domain.card.model.Card;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface CardRepository {
 
@@ -24,4 +25,6 @@ public interface CardRepository {
     void deleteCard(Long cardId);
 
     boolean isExist(Long cardId);
+
+    List<Card> getAllCards(Pageable pageable, Long boardId);
 }

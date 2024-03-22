@@ -1,6 +1,5 @@
 package com.sparta.njick.domain.card.repository;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.njick.domain.assign.infrastructure.AssignEntity;
 import com.sparta.njick.domain.assign.infrastructure.AssignJpaRepository;
 import com.sparta.njick.domain.assign.model.Assign;
@@ -12,6 +11,7 @@ import com.sparta.njick.domain.card.model.Card;
 import com.sparta.njick.global.exception.CustomRuntimeException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
@@ -20,7 +20,6 @@ public class CardRepositoryImpl implements CardRepository {
 
     private final CardJpaRepository cardJpaRepository;
     private final AssignJpaRepository assignJpaRepository;
-    private final JPAQueryFactory queryFactory;
 
     @Override
     public Card save(CardCreateRequestDto requestDto, Long boardId, Long userId) {
@@ -93,6 +92,14 @@ public class CardRepositoryImpl implements CardRepository {
     @Override
     public boolean isExist(Long cardId) {
         return cardJpaRepository.findById(cardId).isPresent();
+    }
+
+    @Override
+    public List<Card> getAllCards(Pageable pageable, Long boardId) {
+        return cardJpaRepository.getAllSortedCards(pageable, boardId)
+            .stream()
+            .map(CardEntity::toModel)
+            .toList();
     }
 
     @Override

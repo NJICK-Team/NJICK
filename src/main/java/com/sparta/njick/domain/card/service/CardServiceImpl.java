@@ -3,11 +3,14 @@ package com.sparta.njick.domain.card.service;
 import com.sparta.njick.domain.assign.model.Assigns;
 import com.sparta.njick.domain.board.repository.BoardRepository;
 import com.sparta.njick.domain.card.dto.request.CardCreateRequestDto;
+import com.sparta.njick.domain.card.dto.request.CardPageRequestDto;
 import com.sparta.njick.domain.card.dto.request.CardUpdateRequestDto;
 import com.sparta.njick.domain.card.dto.response.CardResponseDto;
 import com.sparta.njick.domain.card.model.Card;
 import com.sparta.njick.domain.card.repository.CardRepository;
 import com.sparta.njick.global.exception.CustomRuntimeException;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,5 +74,20 @@ public class CardServiceImpl implements CardService {
         card.validateBoardId(boardId);
 
         cardRepository.deleteCard(cardId);
+    }
+
+    @Override
+    public List<CardResponseDto> getAllCards(Long userId, Long boardId, CardPageRequestDto pageRequestDto) {
+        if (!boardRepository.isParticipated(boardId, userId)) {
+            throw new CustomRuntimeException("해당 보드에 참여중인 유저가 아닙니다.");
+        }
+        List<Card> allCards = cardRepository.getAllCards(pageRequestDto.toPageable(), boardId);
+
+        List<CardResponseDto> responseDtos = new ArrayList<>();
+        for (Card card : allCards) {
+            Assigns assigns = cardRepository.findAssignsByCardId(card.getId());
+            responseDtos.add(new CardResponseDto(card, assigns.getAssigns()));
+        }
+        return responseDtos;
     }
 }

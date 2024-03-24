@@ -49,7 +49,12 @@
 
 ## ERD
 
+<img width="700" alt="image" src="https://github.com/NJICK-Team/NJICK/assets/155048724/9acc088e-b9a1-422b-925d-df7889e1ebdb">
+
+
 ## API 명세서
+
+[API 명세서 바로가기](https://teamsparta.notion.site/d1c071addf0e4f378a20c5569b4f511d?v=d22816e294d0412c9714f3a4e3cf29df)
 
 ## Member
 
